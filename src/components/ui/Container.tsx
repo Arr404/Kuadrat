@@ -32,15 +32,43 @@ interface BoxMap {
 }
 
 export const Container: FC<ContainerProps> = ({ snapToGrid }) => {
+  const [jumlahXKuadrat, setJumlahXKuadrat] = useState<number>(1);
+  const [jumlahX, setJumlahX] = useState<number>(2);
+  const [jumlahKonstanta, setJumlahKonstanta] = useState<number>(1);
   const [boxes, setBoxes] = useState<BoxMap>({});
   const [boxesDuplicate, setBoxesDuplicate] = useState<BoxMap>({
     a: { top: 20, left: 20, title: "X^2" },
-    b: { top: 20, left: 180, title: "X" },
-    c: { top: 20, left: 100, title: "X(h)" },
-    d: { top: 20, left: 240, title: "1" },
+    b: { top: 20, left: 100, title: "X" },
+    c: { top: 120, left: 100, title: "X(h)" },
+    d: { top: 20, left: 170, title: "1" },
   });
   const addBox = useCallback(
     (id: string, left: number, top: number, title: string) => {
+      let sisaHabis = false;
+
+      if (title === "X^2") {
+        if (jumlahXKuadrat === 0) {
+          sisaHabis = true;
+          alert("Sisa habis");
+          return;
+        }
+        setJumlahXKuadrat(jumlahXKuadrat - 1);
+      } else if (title === "X" || title === "X(h)") {
+        if (jumlahX === 0) {
+          sisaHabis = true;
+          alert("Sisa habis");
+          return;
+        }
+        setJumlahX(jumlahX - 1);
+      } else if (title === "1") {
+        if (jumlahKonstanta === 0) {
+          sisaHabis = true;
+          alert("Sisa habis");
+          return;
+        }
+        setJumlahKonstanta(jumlahKonstanta - 1);
+      }
+
       setBoxes(
         update(boxes, {
           [id]: {
@@ -126,11 +154,6 @@ export const Container: FC<ContainerProps> = ({ snapToGrid }) => {
       </div>
       <div>
         {Object.keys(boxesDuplicate).map((key) => (
-          //   {
-          //     console.log("key", { ...(boxesDuplicate[key] as any) });
-          //     return <>test</>;
-          //   }
-
           <DragDuplicateBox
             key={key}
             id={key}
@@ -147,6 +170,11 @@ export const Container: FC<ContainerProps> = ({ snapToGrid }) => {
               left: number;
               title: string;
             })}
+            jumlah={{
+              jumlahKonstanta,
+              jumlahX,
+              jumlahXKuadrat,
+            }}
           />
         ))}
       </div>

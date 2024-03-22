@@ -34,10 +34,24 @@ export interface DraggableDuplicateBoxProps {
   top: number;
   addBox?: (id: string, left: number, top: number, title: string) => void;
   onClick?: () => void;
+  jumlah: {
+    jumlahXKuadrat: number;
+    jumlahX: number;
+    jumlahKonstanta: number;
+  };
 }
 export const DragDuplicateBox: FC<DraggableDuplicateBoxProps> = memo(
   function DraggableBox(props) {
     const { id, title, left, top, addBox } = props;
+
+    const jumlahSisa =
+      title === "X^2"
+        ? props.jumlah.jumlahXKuadrat
+        : title === "X"
+        ? props.jumlah.jumlahX
+        : title === "1"
+        ? props.jumlah.jumlahKonstanta
+        : 0;
 
     const [{ isDragging }, drag, preview] = useDrag(
       () => ({
@@ -63,9 +77,12 @@ export const DragDuplicateBox: FC<DraggableDuplicateBoxProps> = memo(
         // ref={drag}
         style={getStyles(left, top, isDragging, 100, 100)}
         // role="DraggableBox"
-        className={"max-w-22 min-w-22 max-h-22 min-h-22"}
+        className={
+          "max-w-22 min-w-22 max-h-22 min-h-22 flex flex-col items-center"
+        }
         onClick={props.onClick}
       >
+        {title !== "X(h)" && <span>{jumlahSisa}</span>}
         <Box title={title} />
       </div>
     );
