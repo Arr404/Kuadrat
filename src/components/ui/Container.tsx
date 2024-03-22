@@ -5,6 +5,7 @@ import { useDrop } from 'react-dnd'
 import { snapToGrid as doSnapToGrid } from './snapToGrid'
 import { DraggableBox } from './DraggableBox'
 import {DragDuplicateBox} from "@/components/ui/DragDuplicateBox";
+import {KoordinatToEquation} from "@/components/function/KoordinatToEquation";
 
 export interface DragItem {
     id: string
@@ -28,7 +29,7 @@ export interface ContainerProps {
     snapToGrid: boolean
 }
 
-interface BoxMap {
+export interface BoxMap {
     [key: string]: { top: number; left: number; title: string }
 }
 
@@ -51,6 +52,7 @@ export const Container: FC<ContainerProps> = ({ snapToGrid }) => {
         [boxes],
     )
     useEffect(() => {
+        console.log(KoordinatToEquation(boxes))
         console.log(boxes)
     },[boxes])
 
